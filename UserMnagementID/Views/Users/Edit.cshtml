@@ -1,0 +1,101 @@
+﻿@using UserMnagementID.ViewModels
+@model ProfileFormViewModel
+
+@{
+    ViewData["Title"] = "Edit Profile";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow rounded-3">
+                <div class="card-body p-4">
+                    <h3 class="mb-4 text-center text-primary">Edit Profile</h3>
+
+                    <form asp-action="Edit" method="post" enctype="multipart/form-data">
+                        <input type="hidden" asp-for="ProfileID" />
+
+                        <div asp-validation-summary="ModelOnly" class="alert alert-danger" role="alert"></div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="FirstName" class="form-label"></label>
+                                <input asp-for="FirstName" class="form-control" />
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="LastName" class="form-label"></label>
+                                <input asp-for="LastName" class="form-control" />
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label"></label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="UserName" class="form-label"></label>
+                            <input asp-for="UserName" class="form-control" />
+                            <span asp-validation-for="UserName" class="text-danger"></span>
+                        </div>
+
+                        @if (Model.ExistingProfilePicture != null)
+                        {
+                            var base64 = Convert.ToBase64String(Model.ExistingProfilePicture);
+                            var imageUrl = $"data:image/*;base64,{base64}";
+                            <div class="mb-3 text-center">
+                                <img src="@imageUrl" alt="Profile Picture" class="img-thumbnail mb-2" style="max-height: 150px;" />
+                                <div class="form-text">Current Profile Picture</div>
+                            </div>
+                        }
+
+                        <div class="mb-3">
+                            <label asp-for="ProfileImage" class="form-label">Upload New Profile Picture</label>
+                            <input asp-for="ProfileImage" type="file" class="form-control" />
+                            <span asp-validation-for="ProfileImage" class="text-danger"></span>
+                        </div>
+
+                        <div class="text-end mt-4">
+                            <button type="submit" class="btn btn-primary px-4">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+
+    <script>
+        document.getElementById('ProfileImage').addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    let existingPreview = document.getElementById('newProfilePreview');
+                    if (!existingPreview) {
+                        // لو مفيش preview، نضيفه تحت الصورة القديمة
+                        const previewImg = document.createElement('img');
+                        previewImg.id = 'newProfilePreview';
+                        previewImg.className = 'img-thumbnail mt-2';
+                        previewImg.style.maxHeight = '150px';
+                        previewImg.src = e.target.result;
+
+                        const currentImageContainer = document.querySelector('.mb-3.text-center');
+                        if (currentImageContainer) {
+                            currentImageContainer.appendChild(previewImg);
+                        }
+                    } else {
+                        existingPreview.src = e.target.result;
+                    }
+                };
+                reader.readAsDataURL(file);
+            }
+        });
+    </script>
+}

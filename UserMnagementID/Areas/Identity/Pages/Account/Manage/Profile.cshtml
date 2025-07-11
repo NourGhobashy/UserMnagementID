@@ -1,0 +1,20 @@
+﻿@* namespace UserMnagementID.Areas.Identity.Pages.Account.Manage
+{
+    public class Profile
+    {
+    }
+} *@
+
+@model UserMnagementID.Areas.Identity.Pages.Account.Manage.ProfileModel
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<div>
+    <p><strong>Username:</strong> @Model.Username</p>
+    <p><strong>Email:</strong> @Model.Email</p>
+    <p><strong>First Name:</strong> @Model.FirstName</p>
+    <p><strong>Last Name:</strong> @Model.LastName</p>
+</div>

@@ -1,0 +1,117 @@
+﻿@using UserMnagementID.ViewModels
+@model AddUserViewModel
+
+@{
+    ViewData["Title"] = "New User";
+}
+
+<div class="container mt-5">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow rounded-3">
+                <div class="card-body p-4">
+                    <h3 class="mb-4 text-center text-primary">Create New User</h3>
+
+                    <form id="registerForm" asp-action="Add" method="post" enctype="multipart/form-data">
+                        <div class="mb-3 text-danger" asp-validation-summary="ModelOnly"></div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="FirstName" class="form-label"></label>
+                                <input asp-for="FirstName" class="form-control" />
+                                <span asp-validation-for="FirstName" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="LastName" class="form-label"></label>
+                                <input asp-for="LastName" class="form-control" />
+                                <span asp-validation-for="LastName" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="Email" class="form-label"></label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="UserName" class="form-label"></label>
+                            <input asp-for="UserName" class="form-control" />
+                            <span asp-validation-for="UserName" class="text-danger"></span>
+                        </div>
+
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="Password" class="form-label"></label>
+                                <input asp-for="Password" class="form-control" />
+                                <span asp-validation-for="Password" class="text-danger"></span>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label asp-for="ConfirmPassword" class="form-label"></label>
+                                <input asp-for="ConfirmPassword" class="form-control" />
+                                <span asp-validation-for="ConfirmPassword" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="mb-3">
+                            <label asp-for="ProfileImage" class="form-label">Profile Picture</label>
+                            <input asp-for="ProfileImage" type="file" class="form-control" />
+                            <span asp-validation-for="ProfileImage" class="text-danger"></span>
+                        </div>
+
+                        <hr />
+                        <h6>Assign Roles</h6>
+
+                        @for (int i = 0; i < Model.Roles.Count; i++)
+                        {
+                            <div class="form-check mb-2">
+                                <input type="hidden" asp-for="Roles[@i].RoleName" />
+                                <input asp-for="Roles[@i].isSelected" class="form-check-input" />
+                                <label class="form-check-label" asp-for="Roles[@i].isSelected">@Model.Roles[i].RoleName</label>
+                            </div>
+                        }
+                        <span asp-validation-for="Roles" class="text-danger"></span>
+
+                        <div class="text-end mt-4">
+                            <button type="submit" class="btn btn-primary px-4">Save</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+    <script>
+        $(document).ready(function () {
+            $('#registerForm').submit(function (e) {
+                e.preventDefault();
+
+                let form = $('#registerForm')[0];
+                let data = new FormData(form);
+
+                $.ajax({
+                    url: form.action,
+                    type: 'POST',
+                    data: data,
+                    processData: false,
+                    contentType: false,
+                    success: function (res) {
+                        $(".text-danger").text(""); // clear previous errors
+                        if (res.success) {
+                            alert("User created successfully!");
+                            form.reset();
+                        } else {
+                            $.each(res.errors, function (key, msg) {
+                                let span = $(`[data-valmsg-for="${key}"]`);
+                                span.text(msg);
+                            });
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}

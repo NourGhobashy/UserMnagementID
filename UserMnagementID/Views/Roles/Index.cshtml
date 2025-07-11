@@ -1,0 +1,31 @@
+﻿@using UserMnagementID.ViewModels
+@model IEnumerable<Microsoft.AspNetCore.Identity.IdentityRole>
+
+@{
+    ViewBag.Title = "List of Roles";
+}
+
+<h2>🛡️ List of Roles</h2>
+
+<partial name="_RoleForm" model="new UserMnagementID.ViewModels.RoleViewModels()" />
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Role Name</th>
+            <th>Role ID</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var role in Model)
+        {
+            <tr>
+                <td>@role.Name</td>
+                <td>@role.Id</td>
+            </tr>
+        }
+    </tbody>
+</table>
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

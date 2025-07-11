@@ -1,0 +1,13 @@
+﻿@using UserMnagementID.ViewModels
+@model UserMnagementID.ViewModels.RoleViewModels
+
+<form method="post" asp-action="Add" asp-controller="Roles" class="mb-4">
+    @Html.AntiForgeryToken()
+
+    <div class="input-group">
+        <input asp-for="RoleName" class="form-control" placeholder="Role Name..." />
+        <button class="btn btn-outline-primary" type="submit">Add</button>
+    </div>
+
+    <span asp-validation-for="RoleName" class="text-danger"></span>
+</form>
