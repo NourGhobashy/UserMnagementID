@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using UserMnagementID.Data;
 using UserMnagementID.Models;
+using UserMnagementID.Servises;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,10 +14,12 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
-builder.Services.AddIdentity<AppUser, IdentityRole>()//(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddIdentity<AppUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
     .AddEntityFrameworkStores<ApplicationDbContext>()
 .AddDefaultUI().AddDefaultTokenProviders();
 builder.Services.AddControllersWithViews();
+builder.Services.AddTransient<IEmailSender, EmailSender>();
+
 
 var app = builder.Build();
 
